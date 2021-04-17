@@ -38,7 +38,7 @@ def check_data():
             lastname = name_list[1]
             title = faculty_soup.find('p').find('strong').text
             research_list = faculty_soup.find('p').find_all('a')
-            research_interests = 'Research interests: '
+            research_interests = ''
             for research in research_list:
                 if (research['href'][1:9] == 'Research'):
                     research_interests += research.text + ' '

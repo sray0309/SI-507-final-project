@@ -35,8 +35,3 @@ def retrieve_auth_detail(id, count):
     response = requests.get(url, headers={'Accept': 'application/json'})
     data = response.json()
     print(data['search-results']['entry'])
-
-id = find_id('david', 'blaauw', 'michigan')
-print(id)
-print(retrieve_auth_info(id))
-retrieve_auth_detail(id,1)

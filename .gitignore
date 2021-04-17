@@ -2,3 +2,4 @@ __pycache__
 cache/*.json
 faculty.sqlite
 secrets.py
+test.py
