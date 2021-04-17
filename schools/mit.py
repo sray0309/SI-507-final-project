@@ -87,5 +87,3 @@ def check_data():
 
     else:
         print('Massachusetts Institute of Technology: Using cache')
-
-check_data()
