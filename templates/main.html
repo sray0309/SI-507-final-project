@@ -5,7 +5,12 @@
 </head>
 
 <body>
-<h1><a href="https://www.scopus.com/authid/detail.uri?authorId=7006597968">David T. Blaauw</a></h1>
+<h1><a href="https://www.scopus.com/authid/detail.uri?authorId=7006340241">Avideh Zakhor</a></h1>
+<ol>
+    {% for artical in articals %}
+    <li><a href={{ artical.url }}>{{ artical.title }}</a></li>
+    {% endfor %}
+</ol>
 </body>
 
 </html>

@@ -3,3 +3,4 @@ cache/*.json
 faculty.sqlite
 secrets.py
 test.py
+publications.json

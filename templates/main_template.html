@@ -6,6 +6,11 @@
 
 <body>
 <h1><a href="scopus_web">name</a></h1>
+<ol>
+    {% for artical in articals %}
+    <li><a href={{ artical.url }}>{{ artical.title }}</a></li>
+    {% endfor %}
+</ol>
 </body>
 
 </html>

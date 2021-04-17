@@ -4,6 +4,7 @@ import sqlite3
 from bs4 import BeautifulSoup
 import show_detail
 import scopus
+import json
 
 SCHOOL_LIST = ['University of Michigan', 'University of California, Berkeley', 'Massachusetts Institute of Technology']
 SCHOOL_DICT = {
@@ -115,28 +116,36 @@ def interactive_prompt():
             break
     return None
 
-def show_in_browser(firstname, lastname, affil):
+def change_html(auth_id, firstname, lastname):
     main_default = open('templates/main_template.html', 'r')
     main_template = open('templates/main.html', 'w')
     main_read = main_default.read()
     main_default.close()
     # change template content
-    auth_id = scopus.find_id(firstname, lastname, affil)
-    if auth_id == None:
-        print('Cannot find this faculty in SCOPUS')
-        return None
-    main_write = main_read.replace('name', f'{firstname} {lastname}')
-    main_write = main_write.replace('scopus_web', f'https://www.scopus.com/authid/detail.uri?authorId={auth_id}')
+    if auth_id != None:
+        main_write = main_read.replace('name', f'{firstname} {lastname}')
+        main_write = main_write.replace('scopus_web', f'https://www.scopus.com/authid/detail.uri?authorId={auth_id}')
+    else:
+        main_write = main_read.replace('name', 'cannot find this faculty on scopus')
+        main_write = main_write.replace('scopus_web', 'www.google.com')
     # finish changing
     main_template.write(main_write)
     main_template.close()
-    show_detail.app.run(debug=None)
 
 if __name__=="__main__":
     load_data()
     result = interactive_prompt()
 
     if result != None:
-        show_in_browser(result[0], result[1], result[2])
+        auth_id = scopus.find_id(result[0], result[1], result[2])
+        change_html(auth_id, result[0], result[1])
+        publications = {
+            'data': scopus.retrieve_auth_detail(auth_id)
+            }
+        pub_file = open('publications.json', 'w')
+        content = json.dumps(publications)
+        pub_file.write(content)
+        pub_file.close()
+        show_detail.app.run(debug=True, use_reloader=False)
 
 

@@ -14,24 +14,18 @@ def find_id(firstname, lastname, affil):
 
     return author_id
 
-def retrieve_auth_info(id):
-    url = f'http://api.elsevier.com/content/author?author_id={id}&view=metrics&apiKey={secrets.key}'
+def retrieve_auth_detail(id):
+    url = f'http://api.elsevier.com/content/search/scopus?query=AU-ID({id})&count=100&apiKey={secrets.key}'
     response = requests.get(url, headers={'Accept': 'application/json'})
     data = response.json()
-    if data['author-retrieval-response'][0]['@status'] == 'found':
-        info = {
-            'h-index': data['author-retrieval-response'][0]['h-index'],
-            'coauthor-count': data['author-retrieval-response'][0]['coauthor-count'],
-            'document-count': data['author-retrieval-response'][0]['coredata']['document-count'],
-            'cited-by-count': data['author-retrieval-response'][0]['coredata']['cited-by-count'],
-            'citation-count': data['author-retrieval-response'][0]['coredata']['citation-count']
-        }
-        return info
-    else:
-        return None
-
-def retrieve_auth_detail(id, count):
-    url = f'http://api.elsevier.com/content/search/scopus?query=AU-ID({id})&field=dc:identifier,dc:title&count={count}&apiKey={secrets.key}'
-    response = requests.get(url, headers={'Accept': 'application/json'})
-    data = response.json()
-    print(data['search-results']['entry'])
+    results = []
+    for entry in data['search-results']['entry']:
+        for link in entry['link']:
+            if link['@ref'] == 'scopus':
+                ref = link['@href']
+                break
+        results.append({
+            'title': entry['dc:title'],
+            'url': ref
+        })
+    return results
