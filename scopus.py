@@ -19,13 +19,16 @@ def retrieve_auth_detail(id):
     response = requests.get(url, headers={'Accept': 'application/json'})
     data = response.json()
     results = []
-    for entry in data['search-results']['entry']:
-        for link in entry['link']:
-            if link['@ref'] == 'scopus':
-                ref = link['@href']
-                break
-        results.append({
-            'title': entry['dc:title'],
-            'url': ref
-        })
+    try:
+        for entry in data['search-results']['entry']:
+            for link in entry['link']:
+                if link['@ref'] == 'scopus':
+                    ref = link['@href']
+                    break
+            results.append({
+                'title': entry['dc:title'],
+                'url': ref
+            })
+    except:
+        results = []
     return results

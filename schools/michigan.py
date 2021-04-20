@@ -68,13 +68,12 @@ def check_data():
         cursor = connection.cursor()
         delete_old_data = '''
             DELETE FROM faculty
-            WHERE faculty.School = "michigan"
-        '''
+            WHERE SchoolId in (SELECT Id from school WHERE name = "michigan")'''
         cursor.execute(delete_old_data)
         connection.commit()
         for data in faculty['detail']:
             update_data = f'''
-            INSERT INTO faculty ("FirstName", "LastName", "School", "Title", "ResearchInterests", "PersonalWeb", "Email") VALUES("{data['firstname']}", "{data['lastname']}", "michigan", "{data['title']}", "{data['research_interests']}", "{data['personal_web']}", "{data['email']}")
+            INSERT INTO faculty ("FirstName", "LastName", "SchoolId", "Title", "ResearchInterests", "PersonalWeb", "Email") VALUES("{data['firstname']}", "{data['lastname']}", 1, "{data['title']}", "{data['research_interests']}", "{data['personal_web']}", "{data['email']}")
             '''
             cursor.execute(update_data)
             connection.commit()
