@@ -154,6 +154,9 @@ def interactive_prompt():
                     elif int(command[0]) < 1 or int(command[0]) > len(results):
                         print('number out of range')
                         continue
+                    elif command[1] not in ['info', 'detail']:
+                        print('please choose a correct option')
+                        continue
                     elif command[1] == 'info':
                         print('')
                         print('Faculty Information Results:')
